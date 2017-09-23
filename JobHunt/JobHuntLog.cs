@@ -1,27 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Drawing;
-using System.Text;
+using System.Linq;
 using System.Windows.Forms;
-using System.Configuration;
-using NickUtils;
+using JobHuntData;
 
 namespace JobHunt
 {
 	public partial class JobHuntLog : Form
 	{
-		private DataManager _dm = new DataManager(ConfigurationManager.ConnectionStrings["JobHuntConnection"].ConnectionString);
-		private DataTable _dt = null;
-		private SqlDataAdapter _sda = null;
-		private Boolean _IsError = false;
+	    private readonly JobHuntEntities _jobHuntContext = new JobHuntEntities();
+		private readonly Boolean _isError;
 
 		#region Get and Set
 		public Boolean IsError
 		{
-			get { return _IsError; }
+			get { return _isError; }
 		}
 		#endregion
 
@@ -33,16 +29,15 @@ namespace JobHunt
 			
 			try
 			{
-				_dt = _dm.GetDataTable(_dm.RunSQLQuery("SELECT * FROM  JobHuntLog ORDER BY JobHuntId"));
-				dgvJobHuntLog.DataSource = _dt;
-				_sda = _dm.Sda;
-				SqlCommandBuilder builder = new SqlCommandBuilder(_sda);
-				//MessageBox.Show(builder.GetInsertCommand().CommandText);
-			}
+                _jobHuntContext.JobHuntLogs.Load();
+			    dgvJobHuntLog.DataSource = _jobHuntContext.JobHuntLogs.Local.ToBindingList();
+			    
+            
+            }
 			catch (Exception ex)
 			{
 				MessageBox.Show("Error opening table. " + ex.Message, "Form Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				_IsError = true;
+				_isError = true;
 				return;
 			}
 		}
@@ -61,7 +56,7 @@ namespace JobHunt
 
 		private void btnSave_Click(object sender, EventArgs e)
 		{
-			_sda.Update(_dt);
+            _jobHuntContext.SaveChanges();
 
 			this.Close();
 		}
@@ -70,6 +65,7 @@ namespace JobHunt
 		{
 			this.Close();
 		}
+
 
 
 	}

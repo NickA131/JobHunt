@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Job Hunt Log")]
-[assembly: AssemblyDescription("Log of job vacancy applications")]
+[assembly: AssemblyTitle("JobHuntData")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Author: Nick Adams")]
-[assembly: AssemblyProduct("JobHunt")]
-[assembly: AssemblyCopyright("Copyright © 2010 - 2013 Nick Adams")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("JobHuntData")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c3752055-7df2-4474-b2f9-8abfc25832fb")]
+[assembly: Guid("c172fff2-0296-49f7-beff-fdf0a0901624")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.*")]
-
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
