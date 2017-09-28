@@ -26,8 +26,9 @@ namespace JobHuntData
         }
     
         public DbSet<CVPostLog> CVPostLogs { get; set; }
-        public DbSet<JobHuntLog> JobHuntLogs { get; set; }
         public DbSet<WhereFound> WhereFounds { get; set; }
         public DbSet<WhoFound> WhoFounds { get; set; }
+        public DbSet<JobType> JobTypes { get; set; }
+        public DbSet<JobHuntLog> JobHuntLogs { get; set; }
     }
 }

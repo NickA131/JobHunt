@@ -12,15 +12,15 @@ namespace JobHuntData
     using System;
     using System.Collections.Generic;
     
-    public partial class WhoFound
+    public partial class JobType
     {
-        public WhoFound()
+        public JobType()
         {
             this.JobHuntLogs = new HashSet<JobHuntLog>();
         }
     
-        public int WhoFoundId { get; set; }
-        public string Source { get; set; }
+        public int JobTypeId { get; set; }
+        public string Type { get; set; }
         public System.DateTime DateEntered { get; set; }
     
         public virtual ICollection<JobHuntLog> JobHuntLogs { get; set; }

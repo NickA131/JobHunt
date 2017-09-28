@@ -4,18 +4,12 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="JobHuntModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityContainer Name="JobHuntModelStoreContainer">
-          <EntitySet Name="CVPostLog" EntityType="JobHuntModel.Store.CVPostLog" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="JobHuntLog" EntityType="JobHuntModel.Store.JobHuntLog" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="WhereFound" EntityType="JobHuntModel.Store.WhereFound" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="WhoFound" EntityType="JobHuntModel.Store.WhoFound" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="JobHuntModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="CVPostLog">
           <Key>
             <PropertyRef Name="CVPostId" />
           </Key>
-          <Property Name="CVPostId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CVPostId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DatePosted" Type="datetime" />
           <Property Name="Location" Type="nvarchar" MaxLength="50" />
           <Property Name="Notes" Type="nvarchar(max)" />
@@ -26,10 +20,13 @@
           <Key>
             <PropertyRef Name="JobHuntId" />
           </Key>
-          <Property Name="JobHuntId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="JobHuntId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="WhereFoundId" Type="int" />
           <Property Name="WhoFoundId" Type="int" />
+          <Property Name="JobTypeId" Type="int" />
           <Property Name="JobTitle" Type="nvarchar" MaxLength="250" />
+          <Property Name="SalaryRate" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Duration" Type="float" />
           <Property Name="AgencyName" Type="nvarchar" MaxLength="50" />
           <Property Name="DateContact" Type="datetime" />
           <Property Name="SentCVToAgency" Type="bit" />
@@ -45,34 +42,111 @@
           <Property Name="InterviewFeedback" Type="nvarchar(max)" />
           <Property Name="SecondInterviewDate" Type="datetime" />
           <Property Name="SecondInterviewFeedback" Type="nvarchar(max)" />
-          <Property Name="DateEntered" Type="datetime" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="DateEntered" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobType">
+          <Key>
+            <PropertyRef Name="JobTypeId" />
+          </Key>
+          <Property Name="JobTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateEntered" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="WhereFound">
           <Key>
             <PropertyRef Name="WhereFoundId" />
           </Key>
-          <Property Name="WhereFoundId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Source" Type="nvarchar" MaxLength="50" />
-          <Property Name="DateEntered" Type="datetime" />
+          <Property Name="WhereFoundId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Source" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateEntered" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="WhoFound">
           <Key>
             <PropertyRef Name="WhoFoundId" />
           </Key>
-          <Property Name="WhoFoundId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Source" Type="nvarchar" MaxLength="50" />
-          <Property Name="DateEntered" Type="datetime" />
+          <Property Name="WhoFoundId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Source" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateEntered" Type="datetime" Nullable="false" />
         </EntityType>
+        <Association Name="FK_JobHuntLog_JobType">
+          <End Role="JobType" Type="Self.JobType" Multiplicity="0..1" />
+          <End Role="JobHuntLog" Type="Self.JobHuntLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobType">
+              <PropertyRef Name="JobTypeId" />
+            </Principal>
+            <Dependent Role="JobHuntLog">
+              <PropertyRef Name="JobTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobHuntLog_WhereFound">
+          <End Role="WhereFound" Type="Self.WhereFound" Multiplicity="0..1" />
+          <End Role="JobHuntLog" Type="Self.JobHuntLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WhereFound">
+              <PropertyRef Name="WhereFoundId" />
+            </Principal>
+            <Dependent Role="JobHuntLog">
+              <PropertyRef Name="WhereFoundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobHuntLog_WhoFound">
+          <End Role="WhoFound" Type="Self.WhoFound" Multiplicity="0..1" />
+          <End Role="JobHuntLog" Type="Self.JobHuntLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WhoFound">
+              <PropertyRef Name="WhoFoundId" />
+            </Principal>
+            <Dependent Role="JobHuntLog">
+              <PropertyRef Name="WhoFoundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="JobHuntModelStoreContainer">
+          <EntitySet Name="CVPostLog" EntityType="Self.CVPostLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobHuntLog" EntityType="Self.JobHuntLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobType" EntityType="Self.JobType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WhereFound" EntityType="Self.WhereFound" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WhoFound" EntityType="Self.WhoFound" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_JobHuntLog_JobType" Association="Self.FK_JobHuntLog_JobType">
+            <End Role="JobType" EntitySet="JobType" />
+            <End Role="JobHuntLog" EntitySet="JobHuntLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobHuntLog_WhereFound" Association="Self.FK_JobHuntLog_WhereFound">
+            <End Role="WhereFound" EntitySet="WhereFound" />
+            <End Role="JobHuntLog" EntitySet="JobHuntLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobHuntLog_WhoFound" Association="Self.FK_JobHuntLog_WhoFound">
+            <End Role="WhoFound" EntitySet="WhoFound" />
+            <End Role="JobHuntLog" EntitySet="JobHuntLog" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="JobHuntModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="JobHuntEntities" p1:LazyLoadingEnabled="true">
           <EntitySet Name="CVPostLogs" EntityType="JobHuntModel.CVPostLog" />
-          <EntitySet Name="JobHuntLogs" EntityType="JobHuntModel.JobHuntLog" />
           <EntitySet Name="WhereFounds" EntityType="JobHuntModel.WhereFound" />
           <EntitySet Name="WhoFounds" EntityType="JobHuntModel.WhoFound" />
-        </EntityContainer>
+          <EntitySet Name="JobTypes" EntityType="JobHuntModel.JobType" />
+          <EntitySet Name="JobHuntLogs" EntityType="JobHuntModel.JobHuntLog" />
+          <AssociationSet Name="FK_JobHuntLog_JobType" Association="JobHuntModel.FK_JobHuntLog_JobType">
+            <End Role="JobType" EntitySet="JobTypes" />
+            <End Role="JobHuntLog" EntitySet="JobHuntLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobHuntLog_WhereFound" Association="JobHuntModel.FK_JobHuntLog_WhereFound">
+            <End Role="WhereFound" EntitySet="WhereFounds" />
+            <End Role="JobHuntLog" EntitySet="JobHuntLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobHuntLog_WhoFound" Association="JobHuntModel.FK_JobHuntLog_WhoFound">
+            <End Role="WhoFound" EntitySet="WhoFounds" />
+            <End Role="JobHuntLog" EntitySet="JobHuntLogs" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="CVPostLog">
           <Key>
             <PropertyRef Name="CVPostId" />
@@ -84,48 +158,102 @@
           <Property Name="DateEntered" Type="DateTime" Precision="3" />
           <Property Name="DateTakenDown" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="JobHuntLog">
-          <Key>
-            <PropertyRef Name="JobHuntId" />
-          </Key>
-          <Property Name="JobHuntId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="WhereFoundId" Type="Int32" />
-          <Property Name="WhoFoundId" Type="Int32" />
-          <Property Name="JobTitle" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
-          <Property Name="AgencyName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="DateContact" Type="DateTime" Precision="3" />
-          <Property Name="SentCVToAgency" Type="Boolean" />
-          <Property Name="Responded" Type="Boolean" />
-          <Property Name="WhoRespondedId" Type="Int32" />
-          <Property Name="RespondedDate" Type="DateTime" Precision="3" />
-          <Property Name="SentCVToClient" Type="Boolean" />
-          <Property Name="AgentName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="CompanyName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="CompanyContactInterviewer" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="Location" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="InterviewDate" Type="DateTime" Precision="3" />
-          <Property Name="InterviewFeedback" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="SecondInterviewDate" Type="DateTime" Precision="3" />
-          <Property Name="SecondInterviewFeedback" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="DateEntered" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="WhereFound">
           <Key>
             <PropertyRef Name="WhereFoundId" />
           </Key>
           <Property Name="WhereFoundId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="Source" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="DateEntered" Type="DateTime" Precision="3" />
+          <Property Name="Source" Type="String" MaxLength="50" Unicode="true" FixedLength="false" Nullable="false" />
+          <Property Name="DateEntered" Type="DateTime" Precision="3" Nullable="false" />
+          <NavigationProperty Name="JobHuntLogs" Relationship="JobHuntModel.FK_JobHuntLog_WhereFound" FromRole="WhereFound" ToRole="JobHuntLog" />
         </EntityType>
         <EntityType Name="WhoFound">
           <Key>
             <PropertyRef Name="WhoFoundId" />
           </Key>
           <Property Name="WhoFoundId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="Source" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="DateEntered" Type="DateTime" Precision="3" />
+          <Property Name="Source" Type="String" MaxLength="50" Unicode="true" FixedLength="false" Nullable="false" />
+          <Property Name="DateEntered" Type="DateTime" Precision="3" Nullable="false" />
+          <NavigationProperty Name="JobHuntLogs" Relationship="JobHuntModel.FK_JobHuntLog_WhoFound" FromRole="WhoFound" ToRole="JobHuntLog" />
         </EntityType>
-      </Schema>
+        <EntityType Name="JobType">
+          <Key>
+            <PropertyRef Name="JobTypeId" />
+          </Key>
+          <Property Name="JobTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateEntered" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="JobHuntLogs" Relationship="JobHuntModel.FK_JobHuntLog_JobType" FromRole="JobType" ToRole="JobHuntLog" />
+        </EntityType>
+        <EntityType Name="JobHuntLog">
+          <Key>
+            <PropertyRef Name="JobHuntId" />
+          </Key>
+          <Property Name="JobHuntId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WhereFoundId" Type="Int32" />
+          <Property Name="WhoFoundId" Type="Int32" />
+          <Property Name="JobTypeId" Type="Int32" />
+          <Property Name="JobTitle" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="SalaryRate" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Duration" Type="Double" />
+          <Property Name="AgencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateContact" Type="DateTime" Precision="3" />
+          <Property Name="SentCVToAgency" Type="Boolean" />
+          <Property Name="Responded" Type="Boolean" />
+          <Property Name="WhoRespondedId" Type="Int32" />
+          <Property Name="RespondedDate" Type="DateTime" Precision="3" />
+          <Property Name="SentCVToClient" Type="Boolean" />
+          <Property Name="AgentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyContactInterviewer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InterviewDate" Type="DateTime" Precision="3" />
+          <Property Name="InterviewFeedback" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecondInterviewDate" Type="DateTime" Precision="3" />
+          <Property Name="SecondInterviewFeedback" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEntered" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="JobType" Relationship="JobHuntModel.FK_JobHuntLog_JobType" FromRole="JobHuntLog" ToRole="JobType" />
+          <NavigationProperty Name="WhereFound" Relationship="JobHuntModel.FK_JobHuntLog_WhereFound" FromRole="JobHuntLog" ToRole="WhereFound" />
+          <NavigationProperty Name="WhoFound" Relationship="JobHuntModel.FK_JobHuntLog_WhoFound" FromRole="JobHuntLog" ToRole="WhoFound" />
+        </EntityType>
+        <Association Name="FK_JobHuntLog_JobType">
+          <End Type="JobHuntModel.JobType" Role="JobType" Multiplicity="0..1" />
+          <End Type="JobHuntModel.JobHuntLog" Role="JobHuntLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobType">
+              <PropertyRef Name="JobTypeId" />
+            </Principal>
+            <Dependent Role="JobHuntLog">
+              <PropertyRef Name="JobTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobHuntLog_WhereFound">
+          <End Type="JobHuntModel.WhereFound" Role="WhereFound" Multiplicity="0..1" />
+          <End Type="JobHuntModel.JobHuntLog" Role="JobHuntLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WhereFound">
+              <PropertyRef Name="WhereFoundId" />
+            </Principal>
+            <Dependent Role="JobHuntLog">
+              <PropertyRef Name="WhereFoundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobHuntLog_WhoFound">
+          <End Type="JobHuntModel.WhoFound" Role="WhoFound" Multiplicity="0..1" />
+          <End Type="JobHuntModel.JobHuntLog" Role="JobHuntLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WhoFound">
+              <PropertyRef Name="WhoFoundId" />
+            </Principal>
+            <Dependent Role="JobHuntLog">
+              <PropertyRef Name="WhoFoundId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -140,32 +268,6 @@
                 <ScalarProperty Name="Notes" ColumnName="Notes" />
                 <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
                 <ScalarProperty Name="DateTakenDown" ColumnName="DateTakenDown" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="JobHuntLogs">
-            <EntityTypeMapping TypeName="JobHuntModel.JobHuntLog">
-              <MappingFragment StoreEntitySet="JobHuntLog">
-                <ScalarProperty Name="JobHuntId" ColumnName="JobHuntId" />
-                <ScalarProperty Name="WhereFoundId" ColumnName="WhereFoundId" />
-                <ScalarProperty Name="WhoFoundId" ColumnName="WhoFoundId" />
-                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
-                <ScalarProperty Name="AgencyName" ColumnName="AgencyName" />
-                <ScalarProperty Name="DateContact" ColumnName="DateContact" />
-                <ScalarProperty Name="SentCVToAgency" ColumnName="SentCVToAgency" />
-                <ScalarProperty Name="Responded" ColumnName="Responded" />
-                <ScalarProperty Name="WhoRespondedId" ColumnName="WhoRespondedId" />
-                <ScalarProperty Name="RespondedDate" ColumnName="RespondedDate" />
-                <ScalarProperty Name="SentCVToClient" ColumnName="SentCVToClient" />
-                <ScalarProperty Name="AgentName" ColumnName="AgentName" />
-                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
-                <ScalarProperty Name="CompanyContactInterviewer" ColumnName="CompanyContactInterviewer" />
-                <ScalarProperty Name="Location" ColumnName="Location" />
-                <ScalarProperty Name="InterviewDate" ColumnName="InterviewDate" />
-                <ScalarProperty Name="InterviewFeedback" ColumnName="InterviewFeedback" />
-                <ScalarProperty Name="SecondInterviewDate" ColumnName="SecondInterviewDate" />
-                <ScalarProperty Name="SecondInterviewFeedback" ColumnName="SecondInterviewFeedback" />
-                <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -187,6 +289,45 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="JobTypes">
+            <EntityTypeMapping TypeName="JobHuntModel.JobType">
+              <MappingFragment StoreEntitySet="JobType">
+                <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="JobTypeId" ColumnName="JobTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobHuntLogs">
+            <EntityTypeMapping TypeName="JobHuntModel.JobHuntLog">
+              <MappingFragment StoreEntitySet="JobHuntLog">
+                <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="SecondInterviewFeedback" ColumnName="SecondInterviewFeedback" />
+                <ScalarProperty Name="SecondInterviewDate" ColumnName="SecondInterviewDate" />
+                <ScalarProperty Name="InterviewFeedback" ColumnName="InterviewFeedback" />
+                <ScalarProperty Name="InterviewDate" ColumnName="InterviewDate" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="CompanyContactInterviewer" ColumnName="CompanyContactInterviewer" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="AgentName" ColumnName="AgentName" />
+                <ScalarProperty Name="SentCVToClient" ColumnName="SentCVToClient" />
+                <ScalarProperty Name="RespondedDate" ColumnName="RespondedDate" />
+                <ScalarProperty Name="WhoRespondedId" ColumnName="WhoRespondedId" />
+                <ScalarProperty Name="Responded" ColumnName="Responded" />
+                <ScalarProperty Name="SentCVToAgency" ColumnName="SentCVToAgency" />
+                <ScalarProperty Name="DateContact" ColumnName="DateContact" />
+                <ScalarProperty Name="AgencyName" ColumnName="AgencyName" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="SalaryRate" ColumnName="SalaryRate" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+                <ScalarProperty Name="JobTypeId" ColumnName="JobTypeId" />
+                <ScalarProperty Name="WhoFoundId" ColumnName="WhoFoundId" />
+                <ScalarProperty Name="WhereFoundId" ColumnName="WhereFoundId" />
+                <ScalarProperty Name="JobHuntId" ColumnName="JobHuntId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -204,6 +345,7 @@
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

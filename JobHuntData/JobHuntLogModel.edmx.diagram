@@ -6,9 +6,13 @@
     <edmx:Diagrams>
       <Diagram DiagramId="ca9d7feea53a49c0b2ba7d6de2525bb1" Name="Diagram1">
         <EntityTypeShape EntityType="JobHuntModel.CVPostLog" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobHuntModel.JobHuntLog" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="JobHuntModel.WhereFound" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobHuntModel.WhoFound" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="JobHuntModel.WhoFound" Width="1.5" PointX="4.75" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="JobHuntModel.JobType" Width="1.5" PointX="4.75" PointY="5" />
+        <EntityTypeShape EntityType="JobHuntModel.JobHuntLog" Width="1.5" PointX="2.75" PointY="0.75" />
+        <AssociationConnector Association="JobHuntModel.FK_JobHuntLog_JobType" />
+        <AssociationConnector Association="JobHuntModel.FK_JobHuntLog_WhereFound" />
+        <AssociationConnector Association="JobHuntModel.FK_JobHuntLog_WhoFound" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -41,12 +41,14 @@
             this.dgvJobHuntLog.Location = new System.Drawing.Point(13, 13);
             this.dgvJobHuntLog.Name = "dgvJobHuntLog";
             this.dgvJobHuntLog.RowHeadersVisible = false;
-            this.dgvJobHuntLog.Size = new System.Drawing.Size(868, 150);
+            this.dgvJobHuntLog.Size = new System.Drawing.Size(1736, 600);
             this.dgvJobHuntLog.TabIndex = 0;
+            this.dgvJobHuntLog.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvJobHuntLog_DataError);
+            this.dgvJobHuntLog.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvJobHuntLog_RowLeave);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(13, 178);
+            this.btnSave.Location = new System.Drawing.Point(13, 628);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 1;
@@ -56,7 +58,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(806, 178);
+            this.btnCancel.Location = new System.Drawing.Point(1674, 628);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 2;
@@ -68,7 +70,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(893, 211);
+            this.ClientSize = new System.Drawing.Size(1761, 661);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.dgvJobHuntLog);

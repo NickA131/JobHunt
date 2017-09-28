@@ -14,8 +14,15 @@ namespace JobHuntData
     
     public partial class WhereFound
     {
+        public WhereFound()
+        {
+            this.JobHuntLogs = new HashSet<JobHuntLog>();
+        }
+    
         public int WhereFoundId { get; set; }
         public string Source { get; set; }
-        public Nullable<System.DateTime> DateEntered { get; set; }
+        public System.DateTime DateEntered { get; set; }
+    
+        public virtual ICollection<JobHuntLog> JobHuntLogs { get; set; }
     }
 }

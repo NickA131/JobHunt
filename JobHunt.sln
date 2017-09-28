@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHunt", "JobHunt\JobHunt.csproj", "{C830760B-466C-4A73-806A-18307C900CAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobHuntData", "JobHuntData\JobHuntData.csproj", "{C3521434-943D-4933-959A-CD93C0A8BAE0}"

@@ -17,7 +17,10 @@ namespace JobHuntData
         public int JobHuntId { get; set; }
         public Nullable<int> WhereFoundId { get; set; }
         public Nullable<int> WhoFoundId { get; set; }
+        public Nullable<int> JobTypeId { get; set; }
         public string JobTitle { get; set; }
+        public Nullable<decimal> SalaryRate { get; set; }
+        public Nullable<double> Duration { get; set; }
         public string AgencyName { get; set; }
         public Nullable<System.DateTime> DateContact { get; set; }
         public Nullable<bool> SentCVToAgency { get; set; }
@@ -33,6 +36,11 @@ namespace JobHuntData
         public string InterviewFeedback { get; set; }
         public Nullable<System.DateTime> SecondInterviewDate { get; set; }
         public string SecondInterviewFeedback { get; set; }
-        public Nullable<System.DateTime> DateEntered { get; set; }
+        public string Notes { get; set; }
+        public System.DateTime DateEntered { get; set; }
+    
+        public virtual JobType JobType { get; set; }
+        public virtual WhereFound WhereFound { get; set; }
+        public virtual WhoFound WhoFound { get; set; }
     }
 }

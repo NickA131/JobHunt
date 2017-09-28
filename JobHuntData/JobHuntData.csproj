@@ -67,6 +67,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>JobHuntLogModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="JobType.cs">
+      <DependentUpon>JobHuntLogModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WhereFound.cs">
       <DependentUpon>JobHuntLogModel.tt</DependentUpon>
