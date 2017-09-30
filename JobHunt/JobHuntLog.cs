@@ -114,24 +114,15 @@ namespace JobHunt
         {
             var comboBoxColumn = ConvertToComboBoxColumn("WhereFoundId");
             _jobHuntContext.WhereFounds.Load();
-            comboBoxColumn.DataSource = _jobHuntContext.WhereFounds.Local.ToBindingList();
-            comboBoxColumn.DataPropertyName = "WhereFoundId";
-            comboBoxColumn.DisplayMember = "Source";
-            comboBoxColumn.ValueMember = "WhereFoundId";
+            comboBoxColumn = ConfigureComboBoxColumn(comboBoxColumn, _jobHuntContext.WhereFounds.Local.ToBindingList(), "WhereFoundId", "Source", "WhereFoundId");
 
             comboBoxColumn = ConvertToComboBoxColumn("WhoFoundId");
             _jobHuntContext.WhoFounds.Load();
-            comboBoxColumn.DataSource = _jobHuntContext.WhoFounds.Local.ToBindingList();
-            comboBoxColumn.DataPropertyName = "WhoFoundId";
-            comboBoxColumn.DisplayMember = "Source";
-            comboBoxColumn.ValueMember = "WhoFoundId";
+            comboBoxColumn = ConfigureComboBoxColumn(comboBoxColumn, _jobHuntContext.WhoFounds.Local.ToBindingList(), "WhoFoundId", "Source", "WhoFoundId");
 
             comboBoxColumn = ConvertToComboBoxColumn("JobTypeId");
             _jobHuntContext.JobTypes.Load();
-            comboBoxColumn.DataSource = _jobHuntContext.JobTypes.Local.ToBindingList();
-            comboBoxColumn.DataPropertyName = "JobTypeId";
-            comboBoxColumn.DisplayMember = "Type";
-            comboBoxColumn.ValueMember = "JobTypeId";
+            comboBoxColumn = ConfigureComboBoxColumn(comboBoxColumn, _jobHuntContext.JobTypes.Local.ToBindingList(), "JobTypeId", "Type", "JobTypeId");
 
         }
 
@@ -152,6 +143,17 @@ namespace JobHunt
             dgvJobHuntLog.Columns.Insert(colIdx, cbcColumn);
 
             return (DataGridViewComboBoxColumn)dgvJobHuntLog.Columns[colIdx];
+        }
+
+        private DataGridViewComboBoxColumn ConfigureComboBoxColumn(DataGridViewComboBoxColumn comboBoxCol, IBindingList dataSource, string propertyName, string displayMember, string valueMember)
+        {
+
+            comboBoxCol.DataSource = dataSource;
+            comboBoxCol.DataPropertyName = propertyName;
+            comboBoxCol.DisplayMember = displayMember;
+            comboBoxCol.ValueMember = valueMember;
+
+            return comboBoxCol;
         }
         #endregion
 
