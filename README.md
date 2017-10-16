@@ -13,3 +13,11 @@ V1.1
 - Updated from ADO.NET to Entity Framework 5
 - Installs via Click Once
 - Targets: C# .NET 4.5
+
+V1.2
+----
+- First published: 29/09/2017
+- Updated to Visual Studio 2013
+- Added new features including DropDownLists and Notes field
+- Installs via Click Once
+- Targets: C# .NET 4.5
