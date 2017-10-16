@@ -29,6 +29,7 @@ namespace JobHuntData
         public Nullable<System.DateTime> RespondedDate { get; set; }
         public Nullable<bool> SentCVToClient { get; set; }
         public string AgentName { get; set; }
+        public string AgentPhoneNumber { get; set; }
         public string CompanyName { get; set; }
         public string CompanyContactInterviewer { get; set; }
         public string Location { get; set; }

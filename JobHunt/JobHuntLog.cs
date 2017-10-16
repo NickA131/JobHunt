@@ -6,156 +6,60 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using JobHunt.Helpers;
 using JobHuntData;
 
 namespace JobHunt
 {
 	public partial class JobHuntLog : Form
 	{
-	    private readonly JobHuntEntities _jobHuntContext = new JobHuntEntities();
-		private readonly Boolean _isError;
-
-		#region Get and Set
-		public Boolean IsError
-		{
-			get { return _isError; }
-		}
-		#endregion
+	    protected IJobHuntLogDataGridViewHelper _jobHuntDataGridViewHelper;
 
 		#region Constructors
-		// Hide default contsructor
-		public JobHuntLog()
+		public JobHuntLog(IJobHuntLogDataGridViewHelper jobHuntDataGridVewHelper)
 		{
+            _jobHuntDataGridViewHelper = jobHuntDataGridVewHelper;
+
 			InitializeComponent();
 			
 			try
 			{
-                InitialiseDataGrid();
-
+                _jobHuntDataGridViewHelper.Initialise(dgvJobHuntLog);
             }
 			catch (Exception ex)
 			{
 				MessageBox.Show("Error opening table. " + ex.Message, "Form Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				_isError = true;
 				return;
 			}
 		}
 
 		#endregion
 
-        private void InitialiseDataGrid()
-        {
-            // Fetch and bind data
-            _jobHuntContext.JobHuntLogs.Load();
-            dgvJobHuntLog.DataError += new DataGridViewDataErrorEventHandler(dgvJobHuntLog_DataError);
-            dgvJobHuntLog.DataSource = _jobHuntContext.JobHuntLogs.Local.ToBindingList();
-
-            // Convert FK fields to ComboBoxes
-            CreateComboBoxes();
-            
-        }
-
         private void JobHuntLog_Load(object sender, EventArgs e)
         {
             // Prune last 3 columns
-            for (var i = 0; i < 3; i++)
-                dgvJobHuntLog.Columns.RemoveAt(dgvJobHuntLog.Columns.Count - 1);
+            _jobHuntDataGridViewHelper.RTrim(dgvJobHuntLog, 3);
 
             // Set Readonly Columns
-            SetReadOnly(0);
-            dgvJobHuntLog.Columns[0].Width = 70;
-            SetReadOnly(dgvJobHuntLog.Columns.Count - 1);
+            _jobHuntDataGridViewHelper.SetReadOnly(dgvJobHuntLog, 0);
+            //dgvJobHuntLog.Columns[0].Width = 70;
+            _jobHuntDataGridViewHelper.SetReadOnly(dgvJobHuntLog, dgvJobHuntLog.Columns.Count - 1);
 
             // Select last row
-            if (dgvJobHuntLog.Rows.Count > 0)
-                dgvJobHuntLog.Rows[dgvJobHuntLog.Rows.Count - 1].Selected = true;
+            _jobHuntDataGridViewHelper.SelectLastRow(dgvJobHuntLog);
 
         }
 
 		private void btnSave_Click(object sender, EventArgs e)
 		{
-            _jobHuntContext.SaveChanges();
+            _jobHuntDataGridViewHelper.SaveChanges();
 
-			this.Close();
+            this.Hide();
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
-			this.Close();
+            this.Hide();
 		}
-
-        #region Private Members
-        private void dgvJobHuntLog_DataError(object sender, DataGridViewDataErrorEventArgs anError)
-        {
-            MessageBox.Show("Error happened " + anError.Context.ToString(), "Data Update Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            
-        }
-
-        private void dgvJobHuntLog_RowLeave(object sender, DataGridViewCellEventArgs e)
-        {
-            var currentRowIdx = dgvJobHuntLog.CurrentRow.Index;
-            // Last row and has changed
-            if (dgvJobHuntLog.IsCurrentRowDirty && currentRowIdx == dgvJobHuntLog.RowCount -2)
-            {
-                if ((DateTime)dgvJobHuntLog.CurrentRow.Cells["DateEntered"].Value == DateTime.MinValue)
-                    dgvJobHuntLog.CurrentRow.Cells["DateEntered"].Value = DateTime.Now;
-
-            }
-
-        }
-
-        private void SetReadOnly(int colIdx)
-        {
-            dgvJobHuntLog.Columns[colIdx].ReadOnly = true;
-            dgvJobHuntLog.Columns[colIdx].DefaultCellStyle.BackColor = Color.LightGray;
-        }
-
-        private void CreateComboBoxes()
-        {
-            var comboBoxColumn = ConvertToComboBoxColumn("WhereFoundId");
-            _jobHuntContext.WhereFounds.Load();
-            comboBoxColumn = ConfigureComboBoxColumn(comboBoxColumn, _jobHuntContext.WhereFounds.Local.ToBindingList(), "WhereFoundId", "Source", "WhereFoundId");
-
-            comboBoxColumn = ConvertToComboBoxColumn("WhoFoundId");
-            _jobHuntContext.WhoFounds.Load();
-            comboBoxColumn = ConfigureComboBoxColumn(comboBoxColumn, _jobHuntContext.WhoFounds.Local.ToBindingList(), "WhoFoundId", "Source", "WhoFoundId");
-
-            comboBoxColumn = ConvertToComboBoxColumn("JobTypeId");
-            _jobHuntContext.JobTypes.Load();
-            comboBoxColumn = ConfigureComboBoxColumn(comboBoxColumn, _jobHuntContext.JobTypes.Local.ToBindingList(), "JobTypeId", "Type", "JobTypeId");
-
-        }
-
-        private DataGridViewComboBoxColumn ConvertToComboBoxColumn(string columnName)
-        {
-            var colIdx = dgvJobHuntLog.Columns[columnName].Index;
-            var cbcColumn = new DataGridViewComboBoxColumn()
-            {
-                DataPropertyName = columnName,
-                HeaderText = (columnName.ToLower().EndsWith("id") ? columnName.Substring(0, columnName.Length - 2) : columnName),
-                DropDownWidth = 160,
-                Width = 90,
-                MaxDropDownItems = 3,
-                FlatStyle = FlatStyle.Flat
-            };
-
-            dgvJobHuntLog.Columns.RemoveAt(colIdx);
-            dgvJobHuntLog.Columns.Insert(colIdx, cbcColumn);
-
-            return (DataGridViewComboBoxColumn)dgvJobHuntLog.Columns[colIdx];
-        }
-
-        private DataGridViewComboBoxColumn ConfigureComboBoxColumn(DataGridViewComboBoxColumn comboBoxCol, IBindingList dataSource, string propertyName, string displayMember, string valueMember)
-        {
-
-            comboBoxCol.DataSource = dataSource;
-            comboBoxCol.DataPropertyName = propertyName;
-            comboBoxCol.DisplayMember = displayMember;
-            comboBoxCol.ValueMember = valueMember;
-
-            return comboBoxCol;
-        }
-        #endregion
-
     }
 }

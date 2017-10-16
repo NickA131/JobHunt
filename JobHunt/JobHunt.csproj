@@ -68,12 +68,13 @@
     <StartupObject>JobHunt.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DataManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\DataManager.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Ninject, Version=3.3.1.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.1\lib\net45\Ninject.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -99,6 +100,13 @@
     <Compile Include="AboutBox1.Designer.cs">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </Compile>
+    <Compile Include="DependencyInjectionModule.cs" />
+    <Compile Include="Helpers\ComboBoxColumnHelper.cs" />
+    <Compile Include="Helpers\DataGridViewHelper.cs" />
+    <Compile Include="Helpers\IDataGridViewHelper.cs" />
+    <Compile Include="Helpers\IJobHuntLogDataGridViewHelper.cs" />
+    <Compile Include="Helpers\JobHuntLogDataGridViewHelper.cs" />
+    <Compile Include="Helpers\IComboBoxColumnHelper.cs" />
     <Compile Include="JobHuntLog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,9 +146,8 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="JobHunt_1_TemporaryKey.pfx" />
     <None Include="JobHunt_2_TemporaryKey.pfx" />
-    <None Include="JobHunt_TemporaryKey.pfx" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -192,6 +199,7 @@
     <Content Include="cab.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Description.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JobHuntData\JobHuntData.csproj">

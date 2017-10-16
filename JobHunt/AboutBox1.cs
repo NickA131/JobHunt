@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -18,7 +19,21 @@ namespace JobHunt
 			this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
 			this.labelCopyright.Text = AssemblyCopyright;
 			this.labelCompanyName.Text = AssemblyCompany;
-			this.textBoxDescription.Text = AssemblyDescription;
+
+            // Read description
+            try
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var textStreamReader = new StreamReader(assembly.GetManifestResourceStream("JobHunt.Description.txt"));
+                this.textBoxDescription.Text = textStreamReader.ReadToEnd();
+            }
+            catch
+            {
+                // Default if there is an error
+                this.textBoxDescription.Text = AssemblyDescription;
+            }
+
+			
 		}
 
 		#region Assembly Attribute Accessors

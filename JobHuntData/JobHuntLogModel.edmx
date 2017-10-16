@@ -35,6 +35,7 @@
           <Property Name="RespondedDate" Type="datetime" />
           <Property Name="SentCVToClient" Type="bit" />
           <Property Name="AgentName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AgentPhoneNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
           <Property Name="CompanyContactInterviewer" Type="nvarchar" MaxLength="50" />
           <Property Name="Location" Type="nvarchar" MaxLength="50" />
@@ -204,6 +205,7 @@
           <Property Name="RespondedDate" Type="DateTime" Precision="3" />
           <Property Name="SentCVToClient" Type="Boolean" />
           <Property Name="AgentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AgentPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CompanyContactInterviewer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -310,6 +312,7 @@
                 <ScalarProperty Name="Location" ColumnName="Location" />
                 <ScalarProperty Name="CompanyContactInterviewer" ColumnName="CompanyContactInterviewer" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="AgentPhoneNumber" ColumnName="AgentPhoneNumber" />
                 <ScalarProperty Name="AgentName" ColumnName="AgentName" />
                 <ScalarProperty Name="SentCVToClient" ColumnName="SentCVToClient" />
                 <ScalarProperty Name="RespondedDate" ColumnName="RespondedDate" />
