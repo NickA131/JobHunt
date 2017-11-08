@@ -11,9 +11,11 @@ namespace JobHunt.Helpers
 {
     public class ComboBoxColumnHelper : IComboBoxColumnHelper
     {
-
         public DataGridViewComboBoxColumn Create(string columnName)
         {
+            if (string.IsNullOrEmpty(columnName))
+                throw new ArgumentNullException("ColumnName is null");
+
             var comboBoxCol = new DataGridViewComboBoxColumn()
             {
                 DataPropertyName = columnName,
@@ -29,6 +31,10 @@ namespace JobHunt.Helpers
 
         public DataGridViewComboBoxColumn Configure(DataGridViewComboBoxColumn comboBoxCol, IBindingList dataSource, string propertyName, string displayMember, string valueMember)
         {
+            if (comboBoxCol == null)
+                throw new ArgumentNullException("comboBoxColumn is null");
+            if (dataSource == null)
+                throw new ArgumentNullException("dataSource is null");
 
             comboBoxCol.DataSource = dataSource;
             comboBoxCol.DataPropertyName = propertyName;

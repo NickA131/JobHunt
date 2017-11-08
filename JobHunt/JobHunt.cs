@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using JobHunt.Helpers;
+using NinjaSoftwareLtd.ErrorLogging;
 
 namespace JobHunt
 {
@@ -14,9 +15,9 @@ namespace JobHunt
 	{
         protected JobHuntLog _jobHuntLog;
 
-		public JobHunt(IJobHuntLogDataGridViewHelper jobHuntLogDataGridViewHelper)
+		public JobHunt(IJobHuntLogDataGridViewHelper jobHuntLogDataGridViewHelper, IErrorLogger errorLogger)
 		{
-            _jobHuntLog = new JobHuntLog(jobHuntLogDataGridViewHelper);
+            _jobHuntLog = new JobHuntLog(jobHuntLogDataGridViewHelper, errorLogger);
 
 			InitializeComponent();
 		}
