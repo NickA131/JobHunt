@@ -21,3 +21,4 @@ V1.2
 - Added new features including DropDownLists and Notes field
 - Installs via Click Once
 - Targets: C# .NET 4.5
+- Unit Tests
